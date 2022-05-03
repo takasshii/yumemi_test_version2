@@ -44,7 +44,6 @@ class OneFragment : Fragment(R.layout.fragment_one) {
             .setOnEditorActionListener { editText, action, _ ->
                 //ENTERが押された時の処理
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
-                    Log.v("Debug","aa")
                     editText.text.toString().let {
                         //submitListに入力された文字を代入
                         viewModel.searchResults(it).apply {
