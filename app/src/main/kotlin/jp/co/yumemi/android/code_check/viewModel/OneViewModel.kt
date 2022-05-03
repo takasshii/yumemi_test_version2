@@ -5,6 +5,8 @@ package jp.co.yumemi.android.code_check
 
 import android.content.Context
 import android.os.Parcelable
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -26,6 +28,12 @@ import java.util.*
 class OneViewModel(
     val context: Context
 ) : ViewModel() {
+
+    private val _searchInputText: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val searchInputText: LiveData<String>
+    get() = _searchInputText
 
     // 検索結果
     fun searchResults(inputText: String): List<Item> = runBlocking {
