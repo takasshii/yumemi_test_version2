@@ -32,7 +32,7 @@ class OneViewModel(
         MutableLiveData<String>()
     }
     val searchInputText: LiveData<String>
-    get() = _searchInputText
+        get() = _searchInputText
 
     // 検索結果
     fun searchResults(inputText: String): List<Item> = runBlocking {
