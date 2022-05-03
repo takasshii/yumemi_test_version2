@@ -35,10 +35,13 @@ class OneFragment: Fragment(R.layout.fragment_one){
             }
         })
 
+        //EditTextを制御
         _binding.searchInputText
             .setOnEditorActionListener{ editText, action, _ ->
+                //ENTERが押された時の処理
                 if (action== EditorInfo.IME_ACTION_SEARCH){
                     editText.text.toString().let {
+                        //submitListに入力された文字を代入
                         _viewModel.searchResults(it).apply{
                             _adapter.submitList(this)
                         }
@@ -48,6 +51,7 @@ class OneFragment: Fragment(R.layout.fragment_one){
                 return@setOnEditorActionListener false
             }
 
+        //recyclerViewに代入
         _binding.recyclerView.also{
             it.layoutManager= _layoutManager
             it.addItemDecoration(_dividerItemDecoration)
@@ -63,6 +67,8 @@ class OneFragment: Fragment(R.layout.fragment_one){
     }
 }
 
+//差分を比較して計算する
+//変更された部分だけ更新できる
 val diff_util= object: DiffUtil.ItemCallback<Item>(){
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean
     {

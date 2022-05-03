@@ -38,16 +38,20 @@ class OneViewModel(
     fun searchResults(inputText: String): List<Item> = runBlocking {
         val client = HttpClient(Android)
 
+        //api通信
         return@runBlocking GlobalScope.async {
             val response: HttpResponse = client?.get("https://api.github.com/search/repositories") {
                 header("Accept", "application/vnd.github.v3+json")
                 parameter("q", inputText)
             }
 
+            //Jsonのインスタンスを作成
             val jsonBody = JSONObject(response.receive<String>())
 
+            //name値の値を取得
             val jsonItems = jsonBody.optJSONArray("items")!!
 
+            //データ格納用
             val items = mutableListOf<Item>()
 
             /**
