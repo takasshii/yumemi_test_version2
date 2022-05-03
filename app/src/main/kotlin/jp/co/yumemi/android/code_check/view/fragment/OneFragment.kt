@@ -4,6 +4,7 @@
 package jp.co.yumemi.android.code_check
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +15,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
+import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.databinding.FragmentOneBinding
 import jp.co.yumemi.android.code_check.domain.model.item.Item
 import jp.co.yumemi.android.code_check.view.adapter.CustomAdapter
 import jp.co.yumemi.android.code_check.viewModel.OneViewModel
 
+@AndroidEntryPoint
 class OneFragment : Fragment(R.layout.fragment_one) {
     private val viewModel: OneViewModel by viewModels()
 
@@ -41,6 +44,7 @@ class OneFragment : Fragment(R.layout.fragment_one) {
             .setOnEditorActionListener { editText, action, _ ->
                 //ENTERが押された時の処理
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
+                    Log.v("Debug","aa")
                     editText.text.toString().let {
                         //submitListに入力された文字を代入
                         viewModel.searchResults(it).apply {
