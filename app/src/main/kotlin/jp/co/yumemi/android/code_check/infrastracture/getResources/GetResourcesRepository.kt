@@ -7,7 +7,6 @@ import jp.co.yumemi.android.code_check.domain.model.getResources.IGetResources
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class GetResourcesRepository @Inject constructor(
     @ApplicationContext private val context: Context
 ) : IGetResources {
