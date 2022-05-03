@@ -50,7 +50,8 @@
                     android:hint="@string/searchInputText_hint"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:text="@{oneViewModel.searchInputText}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
