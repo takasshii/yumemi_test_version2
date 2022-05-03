@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import jp.co.yumemi.android.code_check.databinding.FragmentOneBinding
 import jp.co.yumemi.android.code_check.domain.item.Item
+import jp.co.yumemi.android.code_check.viewModel.OneViewModel
 
 class OneFragment: Fragment(R.layout.fragment_one){
 
