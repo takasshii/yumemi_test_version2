@@ -3,29 +3,33 @@
  */
 package jp.co.yumemi.android.code_check.viewModel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.domain.item.Item
+import jp.co.yumemi.android.code_check.domain.model.getResources.IGetResources
+import jp.co.yumemi.android.code_check.domain.model.item.Item
 import jp.co.yumemi.android.code_check.view.activity.TopActivity.Companion.lastSearchDate
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import java.util.*
+import javax.inject.Inject
 
 /**
  * TwoFragment で使う
  */
-class OneViewModel(
-    val context: Context
+@HiltViewModel
+class OneViewModel @Inject constructor(
+    val repository: IGetResources
 ) : ViewModel() {
 
     private val _searchInputText: MutableLiveData<String> by lazy {
@@ -71,7 +75,7 @@ class OneViewModel(
                     Item(
                         name = name,
                         ownerIconUrl = ownerIconUrl,
-                        language = context.getString(R.string.written_language, language),
+                        language = repository.getStringResources(language),
                         stargazersCount = stargazersCount,
                         watchersCount = watchersCount,
                         forksCount = forksCount,
