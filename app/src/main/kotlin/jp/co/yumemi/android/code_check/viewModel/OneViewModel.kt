@@ -13,7 +13,7 @@ import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.domain.item.Item
+import jp.co.yumemi.android.code_check.domain.model.item.Item
 import jp.co.yumemi.android.code_check.view.activity.TopActivity.Companion.lastSearchDate
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
