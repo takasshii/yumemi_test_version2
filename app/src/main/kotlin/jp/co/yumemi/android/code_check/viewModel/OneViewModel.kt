@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
@@ -26,7 +27,7 @@ import javax.inject.Inject
 /**
  * TwoFragment で使う
  */
-@AndroidEntryPoint
+@HiltViewModel
 class OneViewModel @Inject constructor(
     val repository: IGetResources
 ) : ViewModel() {
