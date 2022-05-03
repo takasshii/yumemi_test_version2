@@ -29,7 +29,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class OneViewModel @Inject constructor(
-    private val repository: IGetResources
+    val repository: IGetResources
 ) : ViewModel() {
 
     private val _searchInputText: MutableLiveData<String> by lazy {
