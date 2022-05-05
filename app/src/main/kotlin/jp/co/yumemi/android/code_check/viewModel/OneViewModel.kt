@@ -73,7 +73,7 @@ class OneViewModel @Inject constructor(
                     for (i in 0 until it.length()) {
                         val jsonItem = it.optJSONObject(i)
                         val name = jsonItem.optString("full_name")
-                        //jsonItemがnullなら空文字が代入される
+                        //optJSONObjectがnullなら空文字が代入される
                         val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
                         val language = jsonItem.optString("language")
                         val stargazersCount = jsonItem.optLong("stargazers_count")
