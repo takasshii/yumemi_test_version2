@@ -44,13 +44,14 @@ class OneFragment : Fragment(R.layout.fragment_one) {
         binding.searchInputText
             .setOnEditorActionListener { editText, action, _ ->
                 //ENTERが押された時の処理
-
+                if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
                         //submitListに入力された文字を代入
                         viewModel.searchResults(it)
                     }
                     return@setOnEditorActionListener true
-
+                }
+                return@setOnEditorActionListener false
             }
 
         //liveDataで検索結果を監視
