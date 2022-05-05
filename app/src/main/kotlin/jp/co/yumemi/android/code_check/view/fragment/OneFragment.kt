@@ -35,6 +35,7 @@ class OneFragment : Fragment(R.layout.fragment_one) {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentOneBinding.inflate(inflater, container,false)
+        binding.oneViewModel= viewModel
         binding.lifecycleOwner = this
 
         val layoutManager = LinearLayoutManager(requireContext())
