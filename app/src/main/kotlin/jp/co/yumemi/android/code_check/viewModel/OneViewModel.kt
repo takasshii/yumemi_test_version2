@@ -42,19 +42,23 @@ class OneViewModel @Inject constructor(
     val searchInputText: LiveData<String>
         get() = _searchInputText
 
+    private val _items: MutableLiveData<List<Item>> by lazy {
+        MutableLiveData<List<Item>>()
+    }
+    val items: LiveData<List<Item>>
+        get() = _items
+
     // 検索結果
-    fun searchResults(inputText: String): List<Item> {
-        //格納用
-        val items = mutableListOf<Item>()
+    fun searchResults(inputText: String) {
+        //一時格納用
+        val tempItems = mutableListOf<Item>()
 
         viewModelScope.launch {
             //apiRepositoryからデータが送られてきたら走る処理
             apiRepository.getHttpResponse(inputText).map {
-                Log.v("debug", it.toString())
                 //受け取ったデータをJSON型に加工
                 JSONObject(it.receive<String>()).optJSONArray("items")!!
             }.onEach {
-                Log.v("debug", it.toString())
                 //jsonのパース処理
                 for (i in 0 until it.length()) {
                     val jsonItem = it.optJSONObject(i)!!
@@ -66,7 +70,7 @@ class OneViewModel @Inject constructor(
                     val forksCount = jsonItem.optLong("forks_count")
                     val openIssuesCount = jsonItem.optLong("open_issues_count")
 
-                    items.add(
+                    tempItems.add(
                         Item(
                             name = name,
                             ownerIconUrl = ownerIconUrl,
@@ -79,15 +83,13 @@ class OneViewModel @Inject constructor(
                     )
                 }
                 lastSearchDate = Date()
-                items.toList()
+                //LIVEDataを更新
+                _items.value = tempItems.toList()
             }.catch {
                 //例外処理
 
-            }.collect {
-                Log.v("debug", "collect")
-            }
+            }.launchIn(viewModelScope)
         }
-        return items.toList()
     }
 }
 

@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
@@ -45,16 +46,18 @@ class OneFragment : Fragment(R.layout.fragment_one) {
                 //ENTERが押された時の処理
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
-                        Log.v("debug","Enter")
                         //submitListに入力された文字を代入
-                        viewModel.searchResults(it).apply {
-                            adapter.submitList(this)
-                        }
+                        viewModel.searchResults(it)
                     }
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
             }
+
+        //liveDataで検索結果を監視
+        viewModel.items.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
 
         //recyclerViewに代入
         binding.recyclerView.also {
