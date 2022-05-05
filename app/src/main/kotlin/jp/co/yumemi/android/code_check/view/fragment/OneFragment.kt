@@ -25,11 +25,17 @@ import jp.co.yumemi.android.code_check.viewModel.OneViewModel
 @AndroidEntryPoint
 class OneFragment : Fragment(R.layout.fragment_one) {
     private val viewModel: OneViewModel by viewModels()
+    private var _binding: FragmentOneBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val binding = FragmentOneBinding.bind(view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentOneBinding.inflate(inflater, container,false)
+        binding.lifecycleOwner = this
 
         val layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration =
@@ -65,6 +71,15 @@ class OneFragment : Fragment(R.layout.fragment_one) {
             it.addItemDecoration(dividerItemDecoration)
             it.adapter = adapter
         }
+
+        return binding.root
+    }
+
+    //bindingの解放
+    override fun onDestroyView() {
+        super.onDestroyView()
+        //bindingの解放
+        _binding = null
     }
 
     fun gotoRepositoryFragment(item: Item) {
