@@ -71,9 +71,10 @@ class OneViewModel @Inject constructor(
                     //データが存在する時の処理
                     //jsonのパース処理
                     for (i in 0 until it.length()) {
-                        val jsonItem = it.optJSONObject(i)!!
+                        val jsonItem = it.optJSONObject(i)
                         val name = jsonItem.optString("full_name")
-                        val ownerIconUrl = jsonItem.optJSONObject("owner")!!.optString("avatar_url")
+                        //jsonItemがnullなら空文字が代入される
+                        val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
                         val language = jsonItem.optString("language")
                         val stargazersCount = jsonItem.optLong("stargazers_count")
                         val watchersCount = jsonItem.optLong("watchers_count")
