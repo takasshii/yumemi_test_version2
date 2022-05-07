@@ -100,7 +100,7 @@ class OneViewModel @Inject constructor(
     }
 
     //エラー表示用
-    fun notifyError(exception: Throwable) {
+    private fun notifyError(exception: Throwable) {
         _errorContent.value = "エラーが発生しました。検索し直してください。\n エラー内容: $exception"
     }
 }

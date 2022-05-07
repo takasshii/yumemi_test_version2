@@ -3,9 +3,7 @@
  */
 package jp.co.yumemi.android.code_check
 
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
