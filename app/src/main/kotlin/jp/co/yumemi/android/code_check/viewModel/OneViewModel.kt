@@ -94,29 +94,12 @@ class OneViewModel @Inject constructor(
                     //LIVEDataを更新
                     _items.value = tempItems.toList()
                 }
-            }.catch {
-                //データ生成時の例外処理
-                //エラーが発生したことをユーザーに伝える
-                //Itemのnameにエラーを格納する
-                tempItems.add(
-                    Item(
-                        name = "エラーが発生しました。検索し直してください。",
-                        ownerIconUrl = "",
-                        language = "",
-                        stargazersCount = 0,
-                        watchersCount = 0,
-                        forksCount = 0,
-                        openIssuesCount = 0,
-                    )
-                )
-                //LIVEDataを更新
-                _items.value = tempItems.toList()
             }.launchIn(viewModelScope)
         }
     }
 
     fun notifyError(exception: Throwable) {
-        _errorContent.value = "エラーが発生しました。検索し直してください。"
+        _errorContent.value = "エラーが発生しました。検索し直してください。\n エラー内容: $exception"
     }
 }
 
