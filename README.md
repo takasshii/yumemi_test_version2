@@ -3,8 +3,12 @@
 ## 変更点
 
 ### 環境
-- databinding
-- Hilt 2.28-alpha
+- DataBinding
+- Hilt 2.41
+
+### アーキテクチャ
+<img src="https://user-images.githubusercontent.com/83356340/167238818-29caec90-77eb-4875-ba6c-7c1d4bb743be.jpg">
+
 
 ## 概要
 
