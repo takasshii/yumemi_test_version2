@@ -39,6 +39,14 @@ class OneViewModel @Inject constructor(
     val items: LiveData<List<Item>>
         get() = _items
 
+    //エラー内容の表示用
+    private val _errorContent: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val errorContent: LiveData<String>
+        get() = _errorContent
+
+
     // 検索結果を表示するために呼ばれる関数
     fun searchResults(inputText: String) {
         //一時格納用
@@ -47,33 +55,25 @@ class OneViewModel @Inject constructor(
         //非同期処理で実行
         viewModelScope.launch {
             //apiRepositoryからデータが送られてきたら走る処理
-            apiRepository.getHttpResponse(inputText).map {
+            apiRepository.getHttpResponse(inputText).catch { exception ->
+                //エラー処理
+                notifyError(exception)
+                //空白のItemを返す
+                _items.value = tempItems.toList()
+            }.map {
                 //受け取ったデータをJSON型に加工
                 JSONObject(it.receive<String>()).optJSONArray("items")
             }.onEach {
-                //データがなかった時の処理
-                if (it == null) {
-                    //データがないこと、キーワードを変えてもらうことを伝える。
-                    tempItems.add(
-                        Item(
-                            name = "検索結果がありませんでした。キーワードを変えてください。",
-                            ownerIconUrl = "",
-                            language = "",
-                            stargazersCount = 0,
-                            watchersCount = 0,
-                            forksCount = 0,
-                            openIssuesCount = 0,
-                        )
-                    )
-                    //LIVEDataを更新
-                    _items.value = tempItems.toList()
-                } else {
+                //データがなかった時は何も行わない
+                if(it != null) {
                     //データが存在する時の処理
                     //jsonのパース処理
                     for (i in 0 until it.length()) {
-                        val jsonItem = it.optJSONObject(i)
+                        //nullだった場合はskipして次の処理に移る
+                        val jsonItem = it.optJSONObject(i) ?: continue
+
+                        //以下のパース処理でnullだった場合は「空白か0」が格納される
                         val name = jsonItem.optString("full_name")
-                        //optJSONObjectがnullなら空文字が代入される
                         val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
                         val language = jsonItem.optString("language")
                         val stargazersCount = jsonItem.optLong("stargazers_count")
@@ -97,25 +97,13 @@ class OneViewModel @Inject constructor(
                     //LIVEDataを更新
                     _items.value = tempItems.toList()
                 }
-            }.catch {
-                //データ生成時の例外処理
-                //エラーが発生したことをユーザーに伝える
-                //Itemのnameにエラーを格納する
-                tempItems.add(
-                    Item(
-                        name = "エラーが発生しました。検索し直してください。",
-                        ownerIconUrl = "",
-                        language = "",
-                        stargazersCount = 0,
-                        watchersCount = 0,
-                        forksCount = 0,
-                        openIssuesCount = 0,
-                    )
-                )
-                //LIVEDataを更新
-                _items.value = tempItems.toList()
             }.launchIn(viewModelScope)
         }
+    }
+
+    //エラー表示用
+    private fun notifyError(exception: Throwable) {
+        _errorContent.value = "エラーが発生しました。検索し直してください。\n エラー内容: $exception"
     }
 }
 
