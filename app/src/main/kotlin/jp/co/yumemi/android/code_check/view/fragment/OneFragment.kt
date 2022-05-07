@@ -3,6 +3,7 @@
  */
 package jp.co.yumemi.android.code_check
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,7 +31,7 @@ class OneFragment : Fragment(R.layout.fragment_one) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentOneBinding.inflate(inflater, container,false)
         binding.oneViewModel= viewModel
@@ -48,6 +49,8 @@ class OneFragment : Fragment(R.layout.fragment_one) {
         //EditTextを制御
         binding.searchInputText
             .setOnEditorActionListener { editText, action, _ ->
+                //エラーメッセージを削除
+                binding.errorTextView.visibility = View.GONE
                 //ENTERが押された時の処理
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
@@ -61,7 +64,16 @@ class OneFragment : Fragment(R.layout.fragment_one) {
 
         //liveDataで検索結果を監視
         viewModel.items.observe(viewLifecycleOwner, Observer {
+            //エラーメッセージを削除
+            binding.errorTextView.visibility = View.GONE
             adapter.submitList(it)
+        })
+
+        //liveDataでエラーが生じていないかを監視
+        viewModel.errorContent.observe(viewLifecycleOwner, Observer {
+            //エラーメッセージを表示
+            binding.errorTextView.visibility = View.VISIBLE
+            binding.errorTextView.text = it
         })
 
         //recyclerViewに代入

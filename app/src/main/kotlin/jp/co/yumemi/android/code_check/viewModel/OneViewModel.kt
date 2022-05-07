@@ -46,6 +46,7 @@ class OneViewModel @Inject constructor(
     val errorContent: LiveData<String>
         get() = _errorContent
 
+
     // 検索結果を表示するために呼ばれる関数
     fun searchResults(inputText: String) {
         //一時格納用
@@ -98,6 +99,7 @@ class OneViewModel @Inject constructor(
         }
     }
 
+    //エラー表示用
     fun notifyError(exception: Throwable) {
         _errorContent.value = "エラーが発生しました。検索し直してください。\n エラー内容: $exception"
     }
