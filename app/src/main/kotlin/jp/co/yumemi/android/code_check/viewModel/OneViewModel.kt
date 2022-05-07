@@ -58,6 +58,8 @@ class OneViewModel @Inject constructor(
             apiRepository.getHttpResponse(inputText).catch { exception ->
                 //エラー処理
                 notifyError(exception)
+                //空白のItemを返す
+                _items.value = tempItems.toList()
             }.map {
                 //受け取ったデータをJSON型に加工
                 JSONObject(it.receive<String>()).optJSONArray("items")

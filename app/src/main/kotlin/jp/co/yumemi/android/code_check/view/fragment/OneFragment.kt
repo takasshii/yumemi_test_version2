@@ -62,8 +62,6 @@ class OneFragment : Fragment(R.layout.fragment_one) {
 
         //liveDataで検索結果を監視
         viewModel.items.observe(viewLifecycleOwner, Observer {
-            //エラーメッセージを削除
-            binding.errorTextView.visibility = View.GONE
             adapter.submitList(it)
         })
 
