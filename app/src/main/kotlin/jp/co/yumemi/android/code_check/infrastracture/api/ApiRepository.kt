@@ -26,21 +26,15 @@ class ApiRepository @Inject constructor(
     //Httpリスポンスをflowに変換して返す
     override suspend fun getHttpResponse(inputText: String): Flow<HttpResponse> {
         return flow {
-            try {
-                //api通信
-                val httpResponse: HttpResponse =
-                    httpClient.get("https://api.github.com/search/repositories") {
-                        header("Accept", "application/vnd.github.v3+json")
-                        parameter("q", inputText)
-                    }
-                //通信結果をストリームに流す
-                emit(httpResponse)
-            } catch (e: Exception) {
-                //例外処理
-                //エラー内容をLogで流す
-                Log.e("ApiRepository", e.toString())
-                //emitでエラーの内容を返したい
-            }
+            //api通信
+            //エラー処理はViewModel側のcatchで行う
+            val httpResponse: HttpResponse =
+                httpClient.get("https://api.github.com/search/repositories") {
+                    header("Accept", "application/vnd.github.v3+json")
+                    parameter("q", inputText)
+                }
+            //通信結果をストリームに流す
+            emit(httpResponse)
         }
     }
 }
