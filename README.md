@@ -6,9 +6,61 @@
 - DataBinding
 - Hilt 2.41
 
+>build.gradle(app)
+>``` 
+>//dataBinding
+>dataBinding {
+>  enabled = true
+>}     
+>//Hilt
+>implementation "com.google.dagger:hilt-android:2.41"
+>kapt "com.google.dagger:hilt-android-compiler:2.41"
+>```
+>
+>build.gradle(module)
+>``` 
+>//Hilt
+>classpath 'com.google.dagger:hilt-android-gradle-plugin:2.41'
+>```
+
 ### アーキテクチャ
+CleanArchitecture+MVVMを意識した構造にした。
+UIを操作するプレゼンテーション層、interfaceでインフラ層からの操作を可能にするドメイン層、データを取得するインフラ層に分け、
+ViewModelの変更通知をLiveDataで行い、データの取得通知をFlowで行った。また、DIライブラリとしてHiltを用いた。
 <img src="https://user-images.githubusercontent.com/83356340/167238818-29caec90-77eb-4875-ba6c-7c1d4bb743be.jpg">
 
+### コードレビューで教えていただきたい点
+**1. 例外処理**
+
+> 現在のコードの例外処理の仕組み
+> - Flowのcatchで例外を補足
+> - 例外のメッセージをユーザーに表示
+
+>問題点
+> - 例外で渡されるメッセージが一部Json型でないため、パースが出来ずエラー全体を表示してしまっている
+> - それゆえ、インターネット接続がないといった具体的な処置をお知らせできない
+
+>教えていただきたいこと
+> - どのようにエラーを取得してユーザーにお知らせするのか
+
+**2. テストの書き方について**
+
+>問題点
+> - Hiltを用いたテストを[公式ドキュメント](https://developer.android.com/training/dependency-injection/hilt-testing?hl=ja)に沿っ>て書こうとしていたが、以下のようなエラーが消えず困っています。
+ >``` 
+> No instrumentation registered! Must run under a registering instrumentation.
+ >```
+
+>教えていただきたいこと
+> - そもそも単体テストやエンドツーテストのような違いがわかっていないので、体系的に学べるテストの記事や本を教えていただけると助かります。
+
+**3. lateinitについて**
+
+>現在のコード
+> - lateinitに値が代入される前に呼び出される危険性があると知ってはいるが、latainitの部分のリファクタができていない
+
+>教えていただきたいこと
+> - 今回のコードだとどのようにlateinitの部分を書き換えることができるのか
 
 ## 概要
 
