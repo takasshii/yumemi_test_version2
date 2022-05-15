@@ -42,12 +42,15 @@ class ApiRepository @Inject constructor(
                         header("Accept", "application/vnd.github.v3+json")
                         parameter("q", inputText)
                     }
+                //成功した場合、結果を返す
                 Result.Success(data = httpResponse)
             } catch (e: Throwable) {
+                //失敗した場合、エラーメッセージを返す
                 Result.Error(exception = e)
             }
             emit(result)
         }.onStart {
+            //開始時にロードを通知する
             emit(Result.Process)
         }
 
