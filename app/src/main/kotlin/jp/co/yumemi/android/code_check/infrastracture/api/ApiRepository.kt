@@ -18,6 +18,16 @@ import java.util.logging.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 
+//結果を返すクラス
+sealed class Result<out R> {
+    //読み込み中の時
+    object Process: Result<Nothing>()
+    //成功した場合
+    data class Success<out T>(val data: T) : Result<T>()
+    //失敗した場合
+    data class Error(val exception: Exception) : Result<Nothing>()
+}
+
 @Singleton
 class ApiRepository @Inject constructor(
     //インスタンスの生成はApiModule内で行う
