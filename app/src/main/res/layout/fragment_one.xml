@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="oneViewModel"
             type="jp.co.yumemi.android.code_check.viewModel.OneViewModel" />
@@ -74,6 +75,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
+        <ProgressBar
+            android:id="@+id/progressBarWhileLoading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{oneViewModel.loadingCircle ? View.VISIBLE: View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/errorTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
