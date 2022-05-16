@@ -48,6 +48,16 @@ class OneViewModel @Inject constructor(
     val errorContent: LiveData<String>
         get() = _errorContent
 
+    //loadingの通知
+    private val _loadingCircle: MutableLiveData<Boolean> by lazy {
+        //初期値はfalse
+        MutableLiveData<Boolean>().also { mutableLiveData ->
+            mutableLiveData.value = false
+        }
+    }
+    val loadingCircle: LiveData<Boolean>
+        get() = _loadingCircle
+
 
     // 検索結果を表示するために呼ばれる関数
     fun searchResults(inputText: String) {
@@ -61,6 +71,7 @@ class OneViewModel @Inject constructor(
                 when (result) {
                     is Result.Process -> {
                         //ここでロード画面を見せる
+
                     }
                     is Result.Error -> {
                         //ロード画面消す
