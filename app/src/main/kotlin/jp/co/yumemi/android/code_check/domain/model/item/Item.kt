@@ -1,9 +1,10 @@
 package jp.co.yumemi.android.code_check.domain.model.item
 
 import android.os.Parcelable
+import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
+@JsonClass(generateAdapter = true)
 data class Item(
     val name: String,
     val ownerIconUrl: String,
@@ -12,4 +13,4 @@ data class Item(
     val watchersCount: Long,
     val forksCount: Long,
     val openIssuesCount: Long,
-) : Parcelable
+)
