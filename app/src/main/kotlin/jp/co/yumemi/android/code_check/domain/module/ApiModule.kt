@@ -1,5 +1,7 @@
 package jp.co.yumemi.android.code_check.domain.module
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -9,17 +11,30 @@ import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import jp.co.yumemi.android.code_check.domain.model.api.IApiRepository
 import jp.co.yumemi.android.code_check.infrastracture.api.ApiRepository
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
+
     @Provides
     @Singleton
     //HttpClientのインスタンスを生成する
-    fun provideHttpClient(
-    ): HttpClient {
-        return HttpClient(Android)
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+    }
+
+    @Provides
+    @Singleton
+    //HttpClientのインスタンスを生成する
+    fun provideRetrofit(
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.github.com")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
     }
 }
 
