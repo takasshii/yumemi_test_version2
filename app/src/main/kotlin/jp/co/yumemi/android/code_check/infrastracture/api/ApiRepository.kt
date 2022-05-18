@@ -34,10 +34,7 @@ sealed class Result<out R> {
 }
 
 @Singleton
-class ApiRepository @Inject constructor(
-    //インスタンスの生成はApiModule内で行う
-    private val httpClient: HttpClient
-) : IApiRepository {
+class ApiRepository @Inject constructor() : IApiRepository {
     //Httpリスポンスをflowに変換して返す
     override suspend fun getHttpResponse(inputText: String): Flow<Result<HttpResponse>> =
         flow {
@@ -59,12 +56,4 @@ class ApiRepository @Inject constructor(
             emit(Result.Process)
         }
 
-}
-
-interface ApiService {
-    @GET("https://api.github.com/search/repositories")
-    suspend fun fetchRepositoryData(
-        @Header("Accept") header: String,
-        @Query("q") inputText: String
-    ):Response<Item>
 }

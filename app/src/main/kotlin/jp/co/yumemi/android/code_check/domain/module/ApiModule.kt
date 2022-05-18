@@ -7,11 +7,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.*
-import io.ktor.client.engine.android.*
+import jp.co.yumemi.android.code_check.domain.model.api.ApiService
 import jp.co.yumemi.android.code_check.domain.model.api.IApiRepository
 import jp.co.yumemi.android.code_check.infrastracture.api.ApiRepository
-import jp.co.yumemi.android.code_check.infrastracture.api.ApiService
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
