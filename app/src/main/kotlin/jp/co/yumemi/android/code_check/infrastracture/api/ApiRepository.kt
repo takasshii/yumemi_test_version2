@@ -11,7 +11,12 @@ import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.domain.model.api.IApiRepository
 import jp.co.yumemi.android.code_check.domain.model.getResources.IGetResources
+import jp.co.yumemi.android.code_check.domain.model.item.Item
 import kotlinx.coroutines.flow.*
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Query
 import java.util.logging.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -54,4 +59,12 @@ class ApiRepository @Inject constructor(
             emit(Result.Process)
         }
 
+}
+
+interface ApiService {
+    @GET("https://api.github.com/search/repositories")
+    suspend fun fetchRepositoryData(
+        @Header("Accept") header: String,
+        @Query("q") inputText: String
+    ):Response<Item>
 }
