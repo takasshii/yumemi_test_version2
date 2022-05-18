@@ -12,7 +12,7 @@ import retrofit2.http.Query
 
 interface IApiRepository {
     //Flow型を返す
-    suspend fun getHttpResponse(inputText: String): Flow<Result<HttpResponse>>
+    suspend fun getHttpResponse(header: String, inputText: String): Flow<Result<Response<Item>>>
 }
 
 interface ApiService {

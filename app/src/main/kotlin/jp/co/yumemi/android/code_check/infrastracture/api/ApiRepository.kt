@@ -9,6 +9,7 @@ import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.R
+import jp.co.yumemi.android.code_check.domain.model.api.ApiService
 import jp.co.yumemi.android.code_check.domain.model.api.IApiRepository
 import jp.co.yumemi.android.code_check.domain.model.getResources.IGetResources
 import jp.co.yumemi.android.code_check.domain.model.item.Item
@@ -34,16 +35,14 @@ sealed class Result<out R> {
 }
 
 @Singleton
-class ApiRepository @Inject constructor() : IApiRepository {
+class ApiRepository @Inject constructor(
+    private val apiService: ApiService
+) : IApiRepository {
     //Httpリスポンスをflowに変換して返す
-    override suspend fun getHttpResponse(inputText: String): Flow<Result<HttpResponse>> =
+    override suspend fun getHttpResponse(header: String, inputText: String): Flow<Result<Response<Item>>> =
         flow {
             val result = try {
-                val httpResponse: HttpResponse =
-                    httpClient.get("https://api.github.com/search/repositories") {
-                        header("Accept", "application/vnd.github.v3+json")
-                        parameter("q", inputText)
-                    }
+                val httpResponse: Response<Item> = apiService.fetchRepositoryData(header,inputText)
                 //成功した場合、結果を返す
                 Result.Success(data = httpResponse)
             } catch (e: Throwable) {
