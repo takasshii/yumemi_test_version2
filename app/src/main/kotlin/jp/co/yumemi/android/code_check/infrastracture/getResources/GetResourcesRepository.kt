@@ -10,7 +10,10 @@ import javax.inject.Singleton
 class GetResourcesRepository @Inject constructor(
     @ApplicationContext private val context: Context
 ) : IGetResources {
-    override suspend fun getStringResources(language: String): String {
+    override suspend fun getStringResources(language: String?): String {
+        if (language == null) {
+            return "言語情報がありません。"
+        }
         return context.getString(R.string.written_language, language)
     }
 }

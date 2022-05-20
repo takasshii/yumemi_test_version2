@@ -63,7 +63,6 @@ class OneViewModel @Inject constructor(
 
     // 検索結果を表示するために呼ばれる関数
     fun searchResults(inputText: String) {
-        //一時格納用
         val tempItems = mutableListOf<ParcelizeItem>()
 
         //非同期処理で実行
@@ -88,22 +87,20 @@ class OneViewModel @Inject constructor(
                             //ロード画面消す
                             _loadingCircle.value = false
                             //jsonの処理
-                            Log.v("dataSuccess", result.data.toString())
-
                             result.data.body()?.let {
-                                tempItems.add(
-                                    ParcelizeItem(
-                                        name = it.name,
-                                        ownerIconUrl = it.ownerIconUrl,
-                                        language = getResourcesRepository.getStringResources(
-                                            it.language
-                                        ),
-                                        stargazersCount = it.stargazersCount,
-                                        watchersCount = it.watchersCount,
-                                        forksCount = it.forksCount,
-                                        openIssuesCount = it.openIssuesCount
+                                it.items.forEach {
+                                    tempItems.add(
+                                        ParcelizeItem(
+                                            name = it.name,
+                                            ownerIconUrl = it.owner.avatarUrl,
+                                            language = getResourcesRepository.getStringResources(it.language),
+                                            stargazersCount = it.stargazersCount,
+                                            watchersCount = it.watchersCount,
+                                            forksCount = it.forksCount,
+                                            openIssuesCount = it.openIssuesCount
+                                        )
                                     )
-                                )
+                                }
                             }
                             lastSearchDate = Date()
                             //LIVEDataを更新
