@@ -29,7 +29,72 @@ sealed class Result<out R> {
 
 と受け取った型によって処理を変えるように変更した。
 
-- テスト
+- moshiとretrofiでパース処理
+moshiのパースについては以下の方法で行なった。
+```
+//　これでパースを行う
+@JsonClass(generateAdapter = true)
+data class Item(
+    val items: List<Content>
+)
 
+@JsonClass(generateAdapter = true)
+data class Content(
+    val name: String,
+    @Json(name = "owner")
+    val owner: Owner,
+    val language: String?,
+    @Json(name = "stargazers_count")
+    val stargazersCount: Long,
+    @Json(name = "watchers_count")
+    val watchersCount: Long,
+    @Json(name = "forks_count")
+    val forksCount: Long,
+    @Json(name = "open_issues_count")
+    val openIssuesCount: Long,
+)
+
+@JsonClass(generateAdapter = true)
+data class Owner(
+    @Json(name = "avatar_url")
+    val avatarUrl: String
+)
+
+// 受け渡す型を定義したもの
+@Parcelize
+data class ParcelizeItem(
+    val name: String,
+    val ownerIconUrl: String,
+    val language: String,
+    val stargazersCount: Long,
+    val watchersCount: Long,
+    val forksCount: Long,
+    val openIssuesCount: Long,
+) : Parcelable
+```
+retrofitについては以下の方法でアクセスした。
+```
+repository
+
+interface ApiService {
+    @GET("search/repositories")
+    suspend fun fetchRepositoryData(
+        @Header("Accept") header: String,
+        @Query("q") inputText: String
+    ): Response<Item>
+}
+moduleでインスタンス作成
+
+@Provides
+    @Singleton
+    //HttpClientのインスタンスを生成する
+    fun provideRetrofit(
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.github.com")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+    }
+```
 ## 現在取り組んでいるところ
 - テスト
