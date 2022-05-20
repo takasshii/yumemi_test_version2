@@ -25,10 +25,13 @@ class ApiRepository @Inject constructor(
     private val apiService: ApiService
 ) : IApiRepository {
     //Httpリスポンスをflowに変換して返す
-    override suspend fun getHttpResponse(header: String, inputText: String): Flow<Result<Response<Item>>> =
+    override suspend fun getHttpResponse(
+        header: String,
+        inputText: String
+    ): Flow<Result<Response<Item>>> =
         flow {
             val result = try {
-                val httpResponse: Response<Item> = apiService.fetchRepositoryData(header,inputText)
+                val httpResponse: Response<Item> = apiService.fetchRepositoryData(header, inputText)
                 //成功した場合、結果を返す
                 Result.Success(data = httpResponse)
             } catch (e: Throwable) {
