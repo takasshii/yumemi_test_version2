@@ -3,6 +3,7 @@
  */
 package jp.co.yumemi.android.code_check.viewModel
 
+import android.util.Log
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.call.*
@@ -10,6 +11,7 @@ import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.domain.model.api.IApiRepository
 import jp.co.yumemi.android.code_check.domain.model.getResources.IGetResources
 import jp.co.yumemi.android.code_check.domain.model.item.Item
+import jp.co.yumemi.android.code_check.domain.model.item.ParcelizeItem
 import jp.co.yumemi.android.code_check.infrastracture.api.Result
 import jp.co.yumemi.android.code_check.view.activity.TopActivity.Companion.lastSearchDate
 import kotlinx.coroutines.flow.*
@@ -35,10 +37,10 @@ class OneViewModel @Inject constructor(
         get() = _searchInputText
 
     //検索結果の表示用
-    private val _items: MutableLiveData<List<Item>> by lazy {
-        MutableLiveData<List<Item>>()
+    private val _items: MutableLiveData<List<ParcelizeItem>> by lazy {
+        MutableLiveData<List<ParcelizeItem>>()
     }
-    val items: LiveData<List<Item>>
+    val items: LiveData<List<ParcelizeItem>>
         get() = _items
 
     //エラー内容の表示用
@@ -61,71 +63,51 @@ class OneViewModel @Inject constructor(
 
     // 検索結果を表示するために呼ばれる関数
     fun searchResults(inputText: String) {
-        //一時格納用
-        val tempItems = mutableListOf<Item>()
+        val tempItems = mutableListOf<ParcelizeItem>()
 
         //非同期処理で実行
         viewModelScope.launch {
             //apiRepositoryからデータが送られてきたら走る処理
-            apiRepository.getHttpResponse(inputText).onEach { result ->
-                when (result) {
-                    is Result.Process -> {
-                        //ここでロード画面を見せる
-                        _loadingCircle.value = true
-                    }
-                    is Result.Error -> {
-                        //ロード画面消す
-                        _loadingCircle.value = false
-                        //エラー表示
-                        notifyError(result.exception)
-                        //空白のItemを返す
-                        _items.value = tempItems.toList()
-                    }
-                    is Result.Success -> {
-                        //ロード画面消す
-                        _loadingCircle.value = false
-                        //jsonの処理
-                        val tempResult =
-                            JSONObject(result.data.receive<String>()).optJSONArray("items")
-                        if (tempResult != null) {
-                            //データが存在する時の処理
-                            //jsonのパース処理
-                            for (i in 0 until tempResult.length()) {
-                                //nullだった場合はskipして次の処理に移る
-                                val jsonItem = tempResult.optJSONObject(i) ?: continue
-
-                                //以下のパース処理でnullだった場合は「空白か0」が格納される
-                                val name = jsonItem.optString("full_name")
-                                val ownerIconUrl =
-                                    jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
-                                val language = jsonItem.optString("language")
-                                val stargazersCount = jsonItem.optLong("stargazers_count")
-                                val watchersCount = jsonItem.optLong("watchers_count")
-                                val forksCount = jsonItem.optLong("forks_count")
-                                val openIssuesCount = jsonItem.optLong("open_issues_count")
-
-                                tempItems.add(
-                                    Item(
-                                        name = name,
-                                        ownerIconUrl = ownerIconUrl,
-                                        language = getResourcesRepository.getStringResources(
-                                            language
-                                        ),
-                                        stargazersCount = stargazersCount,
-                                        watchersCount = watchersCount,
-                                        forksCount = forksCount,
-                                        openIssuesCount = openIssuesCount
+            apiRepository.getHttpResponse("application/vnd.github.v3+json", inputText)
+                .onEach { result ->
+                    when (result) {
+                        is Result.Process -> {
+                            //ここでロード画面を見せる
+                            _loadingCircle.value = true
+                        }
+                        is Result.Error -> {
+                            //ロード画面消す
+                            _loadingCircle.value = false
+                            //エラー表示
+                            notifyError(result.exception)
+                            //空白のItemを返す
+                            _items.value = tempItems.toList()
+                        }
+                        is Result.Success -> {
+                            //ロード画面消す
+                            _loadingCircle.value = false
+                            //jsonの処理
+                            result.data.body()?.let {
+                                it.items.forEach {
+                                    tempItems.add(
+                                        ParcelizeItem(
+                                            name = it.name,
+                                            ownerIconUrl = it.owner.avatarUrl,
+                                            language = getResourcesRepository.getStringResources(it.language),
+                                            stargazersCount = it.stargazersCount,
+                                            watchersCount = it.watchersCount,
+                                            forksCount = it.forksCount,
+                                            openIssuesCount = it.openIssuesCount
+                                        )
                                     )
-                                )
+                                }
                             }
                             lastSearchDate = Date()
                             //LIVEDataを更新
                             _items.value = tempItems.toList()
-
                         }
                     }
-                }
-            }.launchIn(viewModelScope)
+                }.launchIn(viewModelScope)
         }
     }
 

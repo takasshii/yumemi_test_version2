@@ -1,18 +1,10 @@
 package jp.co.yumemi.android.code_check.infrastracture.api
 
-import android.content.Context
-import android.util.Log
-import android.util.Log.e
-import dagger.hilt.android.qualifiers.ApplicationContext
-import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import jp.co.yumemi.android.code_check.R
+import jp.co.yumemi.android.code_check.domain.model.api.ApiService
 import jp.co.yumemi.android.code_check.domain.model.api.IApiRepository
-import jp.co.yumemi.android.code_check.domain.model.getResources.IGetResources
+import jp.co.yumemi.android.code_check.domain.model.item.Item
 import kotlinx.coroutines.flow.*
-import java.util.logging.Logger
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,18 +22,16 @@ sealed class Result<out R> {
 
 @Singleton
 class ApiRepository @Inject constructor(
-    //インスタンスの生成はApiModule内で行う
-    private val httpClient: HttpClient
+    private val apiService: ApiService
 ) : IApiRepository {
     //Httpリスポンスをflowに変換して返す
-    override suspend fun getHttpResponse(inputText: String): Flow<Result<HttpResponse>> =
+    override suspend fun getHttpResponse(
+        header: String,
+        inputText: String
+    ): Flow<Result<Response<Item>>> =
         flow {
             val result = try {
-                val httpResponse: HttpResponse =
-                    httpClient.get("https://api.github.com/search/repositories") {
-                        header("Accept", "application/vnd.github.v3+json")
-                        parameter("q", inputText)
-                    }
+                val httpResponse: Response<Item> = apiService.fetchRepositoryData(header, inputText)
                 //成功した場合、結果を返す
                 Result.Success(data = httpResponse)
             } catch (e: Throwable) {
@@ -53,5 +43,4 @@ class ApiRepository @Inject constructor(
             //開始時にロードを通知する
             emit(Result.Process)
         }
-
 }

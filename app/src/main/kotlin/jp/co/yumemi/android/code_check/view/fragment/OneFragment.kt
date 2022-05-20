@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.*
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.databinding.FragmentOneBinding
 import jp.co.yumemi.android.code_check.domain.model.item.Item
+import jp.co.yumemi.android.code_check.domain.model.item.ParcelizeItem
 import jp.co.yumemi.android.code_check.view.adapter.CustomAdapter
 import jp.co.yumemi.android.code_check.viewModel.OneViewModel
 
@@ -39,7 +40,7 @@ class OneFragment : Fragment(R.layout.fragment_one) {
         val dividerItemDecoration =
             DividerItemDecoration(requireContext(), layoutManager.orientation)
         val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
-            override fun itemClick(item: Item) {
+            override fun itemClick(item: ParcelizeItem) {
                 gotoRepositoryFragment(item)
             }
         })
@@ -50,14 +51,13 @@ class OneFragment : Fragment(R.layout.fragment_one) {
                 //エラーメッセージを削除
                 binding.errorTextView.visibility = View.GONE
                 //ENTERが押された時の処理
-                if (action == EditorInfo.IME_ACTION_SEARCH) {
+
                     editText.text.toString().let {
                         //submitListに入力された文字を代入
                         viewModel.searchResults(it)
                     }
                     return@setOnEditorActionListener true
-                }
-                return@setOnEditorActionListener false
+
             }
 
         //liveDataで検索結果を監視
@@ -89,7 +89,7 @@ class OneFragment : Fragment(R.layout.fragment_one) {
         _binding = null
     }
 
-    fun gotoRepositoryFragment(item: Item) {
+    fun gotoRepositoryFragment(item: ParcelizeItem) {
         val action = OneFragmentDirections
             .actionRepositoriesFragmentToRepositoryFragment(item = item)
         findNavController().navigate(action)
