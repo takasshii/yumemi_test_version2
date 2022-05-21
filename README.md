@@ -99,18 +99,20 @@ moduleでインスタンス作成
 
 - 階層構造の変更
 
+```
 今までの階層構造  
 --- view  
 |- viewModel  
 |- fragment  
 |- activity  
 |- adapter  
-
+```
+```
 今回変更した階層構造  
 ---- ui  
 |- result  
 |- search  
-
+```
 また、OneFragmentの名前をSearchFragmentにするなど、リファクタした。
 
 ## 現在取り組んでいるところ
