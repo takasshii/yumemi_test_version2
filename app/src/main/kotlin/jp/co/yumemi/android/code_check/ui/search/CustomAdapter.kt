@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.code_check.view.adapter
+package jp.co.yumemi.android.code_check.ui.search
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.domain.model.item.Item
 import jp.co.yumemi.android.code_check.domain.model.item.ParcelizeItem
 
 //差分を比較して計算する
