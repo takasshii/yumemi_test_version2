@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 YUMEMI Inc. All rights reserved.
  */
-package jp.co.yumemi.android.code_check.view.fragment
+package jp.co.yumemi.android.code_check.ui.result
 
 import android.os.Bundle
 import android.util.Log
@@ -13,13 +13,13 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.view.activity.TopActivity.Companion.lastSearchDate
+import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
 import jp.co.yumemi.android.code_check.databinding.FragmentTwoBinding
 
 @AndroidEntryPoint
-class TwoFragment : Fragment(R.layout.fragment_two) {
+class ResultFragment : Fragment(R.layout.fragment_two) {
 
-    private val args: TwoFragmentArgs by navArgs()
+    private val args: ResultFragmentArgs by navArgs()
 
     private var _binding: FragmentTwoBinding? = null
     private val binding get() = _binding!!

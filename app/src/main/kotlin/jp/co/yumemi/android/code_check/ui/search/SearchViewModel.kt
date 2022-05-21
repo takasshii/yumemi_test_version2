@@ -1,22 +1,17 @@
 /*
  * Copyright © 2021 YUMEMI Inc. All rights reserved.
  */
-package jp.co.yumemi.android.code_check.viewModel
+package jp.co.yumemi.android.code_check.ui.search
 
-import android.util.Log
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.ktor.client.call.*
-import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.domain.model.api.IApiRepository
 import jp.co.yumemi.android.code_check.domain.model.getResources.IGetResources
-import jp.co.yumemi.android.code_check.domain.model.item.Item
 import jp.co.yumemi.android.code_check.domain.model.item.ParcelizeItem
 import jp.co.yumemi.android.code_check.infrastracture.api.Result
-import jp.co.yumemi.android.code_check.view.activity.TopActivity.Companion.lastSearchDate
+import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.util.*
 import javax.inject.Inject
 
@@ -24,7 +19,7 @@ import javax.inject.Inject
  * TwoFragment で使う
  */
 @HiltViewModel
-class OneViewModel @Inject constructor(
+class SearchViewModel @Inject constructor(
     private val getResourcesRepository: IGetResources,
     private val apiRepository: IApiRepository
 ) : ViewModel() {
