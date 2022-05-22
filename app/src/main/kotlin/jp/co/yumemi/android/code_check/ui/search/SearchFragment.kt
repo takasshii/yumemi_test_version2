@@ -44,7 +44,7 @@ class SearchFragment : Fragment(R.layout.fragment_one) {
 
         //EditTextを制御
         binding.searchInputText
-            .setOnEditorActionListener { editText, action, _ ->
+            .setOnEditorActionListener { editText, _, _ ->
                 //エラーメッセージを削除
                 binding.errorTextView.visibility = View.GONE
                 //ENTERが押された時の処理
