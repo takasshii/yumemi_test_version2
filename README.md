@@ -1,4 +1,5 @@
 # 株式会社ゆめみ Android エンジニアコードチェック課題
+## [こちらのリポジトリ](https://github.com/takasshii/yumemi-test)の改良版です
 
 ## 変更点
 - 例外処理
