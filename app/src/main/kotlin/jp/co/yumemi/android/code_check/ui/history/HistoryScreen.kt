@@ -8,6 +8,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,16 +18,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jp.co.yumemi.android.code_check.R
 
-@Preview
 @Composable
-fun HistoryScreen(names: List<String> = List(1000) {"test"}) {
+fun HistoryScreen(historyViewModel: HistoryViewModel) {
     val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
+    val historyList = historyViewModel.historyList.collectAsState()
     
     Scaffold(modifier = Modifier.fillMaxSize()) {
        LazyColumn() {
-         items(items = names) { name ->
-             itemCard(name)
+         items(items = historyList.value) { history ->
+             itemCard(history.name)
          }
        }
     }
