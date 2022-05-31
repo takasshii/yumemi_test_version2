@@ -1,20 +1,18 @@
 package jp.co.yumemi.android.code_check.infrastracture.room
 
-import androidx.room.*
-import com.squareup.moshi.Json
-import kotlinx.coroutines.flow.Flow
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
 
 @Dao
 interface HistoryDAO {
     @Insert
-    fun insert(json: Json)
+    fun insert(history: History)
 
-    @Query("select * from history where id = 1")
-    fun getAll(): Flow<Json>
-
-    @Update
-    fun updateJson(json: Json)
+    @Query("select * from history")
+    fun getAll(): List<History>
 
     @Delete
-    fun deleteSelected(json: Json)
+    fun deleteSelected(history: History)
 }
