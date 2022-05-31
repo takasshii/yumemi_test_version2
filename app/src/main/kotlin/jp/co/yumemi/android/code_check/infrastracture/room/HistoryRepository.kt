@@ -10,10 +10,10 @@ import javax.inject.Inject
 sealed class DBResult<out R> {
     //読み込み中の時
     object Process : DBResult<Nothing>()
-
     //成功した場合
     data class Success<out T>(val data: T) : DBResult<T>()
-
+    //成功した場合かつ何もなかった時
+    object Empty: DBResult<Nothing>()
     //失敗した場合
     data class Error(val exception: Throwable) : DBResult<Nothing>()
 }
@@ -30,7 +30,8 @@ class HistoryRepository @Inject constructor(
             val result = try {
                 val historyList: List<History> = historyDAO.getAll()
                 //成功した場合、結果を返す
-                DBResult.Success(data = historyList)
+                if(historyList.isEmpty()) DBResult.Empty
+                else DBResult.Success(data = historyList)
             } catch (e: Throwable) {
                 //失敗した場合、エラーメッセージを返す
                 DBResult.Error(exception = e)
@@ -40,8 +41,6 @@ class HistoryRepository @Inject constructor(
             //開始時にロードを通知する
             emit(DBResult.Process)
         }
-
-
 
     override suspend fun delete(history: History) {
         historyDAO.deleteSelected(history)
