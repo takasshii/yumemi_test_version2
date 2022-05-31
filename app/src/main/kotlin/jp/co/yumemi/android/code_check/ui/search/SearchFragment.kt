@@ -14,10 +14,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.databinding.FragmentOneBinding
 import jp.co.yumemi.android.code_check.domain.model.item.ParcelizeItem
+import jp.co.yumemi.android.code_check.ui.history.HistoryScreen
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_one) {
@@ -44,13 +46,24 @@ class SearchFragment : Fragment(R.layout.fragment_one) {
             }
         })
 
+        //historyScreenをセット
+        binding.history.setContent {
+            MdcTheme {
+                HistoryScreen()
+            }
+        }
+
         //EditTextを制御
         binding.searchInputText
             .setOnEditorActionListener { editText, action, _ ->
+                //履歴を表示
+                binding.history.visibility = View.VISIBLE
                 //エラーメッセージを削除
                 binding.errorTextView.visibility = View.GONE
                 //ENTERが押された時の処理
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
+                    //履歴一覧を非表示
+                    binding.history.visibility = View.GONE
                     editText.text.toString().let {
                         //submitListに入力された文字を代入
                         viewModel.searchResults(it)
