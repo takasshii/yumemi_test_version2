@@ -18,7 +18,11 @@ class HistoryViewModel @Inject constructor(
     private val _historyList = MutableStateFlow<List<History>>(emptyList())
     val historyList: StateFlow<List<History>> get() = _historyList
 
-    fun fetchHistoryList() {
+    init {
+        fetchHistoryList()
+    }
+
+    private fun fetchHistoryList() {
         viewModelScope.launch {
             historyRepository.getAll().onEach { result ->
                 when(result) {

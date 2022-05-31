@@ -20,10 +20,12 @@ import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.databinding.FragmentOneBinding
 import jp.co.yumemi.android.code_check.domain.model.item.ParcelizeItem
 import jp.co.yumemi.android.code_check.ui.history.HistoryScreen
+import jp.co.yumemi.android.code_check.ui.history.HistoryViewModel
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_one) {
     private val viewModel: SearchViewModel by viewModels()
+    private val historyViewModel: HistoryViewModel by viewModels()
     private var _binding: FragmentOneBinding? = null
     private val binding get() = _binding!!
 
@@ -49,7 +51,7 @@ class SearchFragment : Fragment(R.layout.fragment_one) {
         //historyScreenをセット
         binding.history.setContent {
             MdcTheme {
-                HistoryScreen()
+                HistoryScreen(historyViewModel)
             }
         }
 
