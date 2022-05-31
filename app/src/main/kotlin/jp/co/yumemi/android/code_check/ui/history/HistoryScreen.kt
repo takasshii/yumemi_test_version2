@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.domain.model.item.Item
 
 @Preview
 @Composable
@@ -42,12 +41,14 @@ fun itemCard(title: String) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row() {
-            Icon(painter = painterResource(id = R.drawable.ic_baseline_history_24), contentDescription = null, modifier = Modifier.size(24.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(painter = painterResource(id = R.drawable.ic_baseline_history_24), contentDescription = null, modifier = Modifier.size(24.dp), tint = Color.Gray)
             Spacer(modifier = Modifier.padding(4.dp))
             Text(text = title, color = Color.Gray)
         }
-        Icon(painter = painterResource(id = R.drawable.ic_baseline_close_24), contentDescription = null, modifier = Modifier.size(24.dp))
+        Icon(painter = painterResource(id = R.drawable.ic_baseline_close_24), contentDescription = null, modifier = Modifier.size(24.dp), tint = Color.Gray)
     }
 }
 
