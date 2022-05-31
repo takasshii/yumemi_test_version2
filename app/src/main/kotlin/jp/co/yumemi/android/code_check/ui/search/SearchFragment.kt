@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.databinding.FragmentOneBinding
@@ -44,17 +46,18 @@ class SearchFragment : Fragment(R.layout.fragment_one) {
 
         //EditTextを制御
         binding.searchInputText
-            .setOnEditorActionListener { editText, _, _ ->
+            .setOnEditorActionListener { editText, action, _ ->
                 //エラーメッセージを削除
                 binding.errorTextView.visibility = View.GONE
                 //ENTERが押された時の処理
-
+                if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
                         //submitListに入力された文字を代入
                         viewModel.searchResults(it)
                     }
                     return@setOnEditorActionListener true
-
+                }
+                return@setOnEditorActionListener false
             }
 
         //liveDataで検索結果を監視
