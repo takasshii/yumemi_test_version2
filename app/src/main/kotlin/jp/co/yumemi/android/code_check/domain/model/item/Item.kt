@@ -15,6 +15,7 @@ data class Content(
     val name: String,
     @Json(name = "owner")
     val owner: Owner,
+    @Json(name = "language")
     val language: String?,
     @Json(name = "stargazers_count")
     val stargazersCount: Long,

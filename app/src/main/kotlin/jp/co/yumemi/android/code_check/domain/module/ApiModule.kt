@@ -28,11 +28,11 @@ object ApiModule {
     @Provides
     @Singleton
     //HttpClientのインスタンスを生成する
-    fun provideRetrofit(
+    fun provideRetrofit(moshi: Moshi
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.github.com")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 

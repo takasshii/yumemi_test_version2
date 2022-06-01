@@ -3,14 +3,21 @@
  */
 package jp.co.yumemi.android.code_check.ui.search
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
 import jp.co.yumemi.android.code_check.domain.model.api.IApiRepository
 import jp.co.yumemi.android.code_check.domain.model.getResources.IGetResources
+import jp.co.yumemi.android.code_check.domain.model.history.IHistoryRepository
 import jp.co.yumemi.android.code_check.domain.model.item.ParcelizeItem
 import jp.co.yumemi.android.code_check.infrastracture.api.Result
-import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
-import kotlinx.coroutines.flow.*
+import jp.co.yumemi.android.code_check.infrastracture.room.History
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -21,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getResourcesRepository: IGetResources,
-    private val apiRepository: IApiRepository
+    private val apiRepository: IApiRepository,
+    private val historyRepository: IHistoryRepository,
 ) : ViewModel() {
 
     //入力欄の保持用
@@ -109,6 +117,22 @@ class SearchViewModel @Inject constructor(
     //エラー表示用
     private fun notifyError(exception: Throwable) {
         _errorContent.value = "エラーが発生しました。検索し直してください。\n エラー内容: $exception"
+    }
+
+    //historyに追加する関数
+    fun insertHistory(item: ParcelizeItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            historyRepository.insert(History(
+                id = 0,
+                name = item.name,
+                avatarUrl = item.ownerIconUrl,
+                language = item.language,
+                stargazersCount = item.stargazersCount,
+                watchersCount = item.watchersCount,
+                forksCount = item.forksCount,
+                openIssuesCount = item.openIssuesCount,
+            ))
+        }
     }
 }
 
