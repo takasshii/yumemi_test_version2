@@ -2,6 +2,7 @@ package jp.co.yumemi.android.code_check.ui.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.code_check.domain.model.history.IHistoryRepository
 import jp.co.yumemi.android.code_check.infrastracture.room.DBResult
 import jp.co.yumemi.android.code_check.infrastracture.room.History
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val historyRepository: IHistoryRepository,
 ) : ViewModel() {
