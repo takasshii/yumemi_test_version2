@@ -35,8 +35,8 @@ class SearchFragment : Fragment(R.layout.fragment_one) {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        _binding = FragmentOneBinding.inflate(inflater, container,false)
-        binding.oneViewModel= viewModel
+        _binding = FragmentOneBinding.inflate(inflater, container, false)
+        binding.oneViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         val layoutManager = LinearLayoutManager(requireContext())
@@ -44,6 +44,8 @@ class SearchFragment : Fragment(R.layout.fragment_one) {
             DividerItemDecoration(requireContext(), layoutManager.orientation)
         val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
             override fun itemClick(item: ParcelizeItem) {
+                //履歴に保存を行う
+                viewModel.insertHistory(item)
                 gotoRepositoryFragment(item)
             }
         })
