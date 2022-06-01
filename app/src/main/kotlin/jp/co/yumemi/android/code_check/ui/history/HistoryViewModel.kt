@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import jp.co.yumemi.android.code_check.domain.model.history.IHistoryRepository
 import jp.co.yumemi.android.code_check.infrastracture.room.DBResult
 import jp.co.yumemi.android.code_check.infrastracture.room.History
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -25,7 +26,7 @@ class HistoryViewModel @Inject constructor(
     private fun fetchHistoryList() {
         viewModelScope.launch {
             historyRepository.getAll().onEach { result ->
-                when(result) {
+                when (result) {
                     is DBResult.Process, is DBResult.Empty -> {
 
                     }
@@ -37,6 +38,12 @@ class HistoryViewModel @Inject constructor(
                     }
                 }
             }.launchIn(viewModelScope)
+        }
+    }
+
+    fun deleteHistory(history: History) {
+        viewModelScope.launch(Dispatchers.IO) {
+            historyRepository.delete(history)
         }
     }
 }
